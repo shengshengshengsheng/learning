@@ -1,0 +1,4 @@
+# Project exclude paths
+/eureka-client/target/
+/eureka-ribbon/target/
+/eureka_server/target/

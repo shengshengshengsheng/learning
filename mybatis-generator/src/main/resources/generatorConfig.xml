@@ -1,0 +1,135 @@
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <properties resource="generatorConfig.properties"/>
+    <!--location是必须的，要添加到classpath中的 JAR/ZIP 文件的完整路径名称或要添加到类路径中的目录-->
+    <classPathEntry location="D:\\Libs\\mysql-connector-java-8.0.17.jar"/>
+
+    <!--context 元素是generatorConfiguration的子元素，
+    一个generatorConfiguration元素可以包含多个context元素，
+    但最少需要包含一个context元素。第一个context 元素代表一个生成对象的上下文。
+    id属性是必需的，用于指定当前上下文的唯一标识。在错误信息的显示时，会用到这个id属性的值。
+    targetRuntime是可选的属性，用于指定生成代码的运行时环境-->
+    <context id="MySQLContext" targetRuntime="MyBatis3">
+
+        <property name="mergeable" value="true"/>
+
+        <!--如果autoDelimitKeywords为true，那么MBG将分隔SQL关键字（如果它们用作表中的列名称）。
+        MBG为许多不同的数据库维护一个SQL关键字列表（可能并不全）。
+        如果某个关键字不在MBG的列表中，则可以强制使用<columnOverride>进行分隔-->
+        <property name="autoDelimitKeywords" value="true"/>
+
+        <!--分隔符的起始字符。如果标识符包含空格，MBG将自动分隔SQL标识符。
+        如果在<table>或<columnOverride>配置中进行了配置，MBG也会分隔SQL标识符。
+        默认值是双引号"。-->
+        <property name="beginningDelimiter" value="`"/>
+
+        <!--分隔符的结束字符。如果标识符包含空格，MBG将自动分隔SQL标识符。
+        如果在<table>或<columnOverride>配置中进行了配置，MBG也会分隔SQL标识符。
+        默认值是双引号"。-->
+        <property name="endingDelimiter" value="`"/>
+
+        <!--plugin元素用来定义一个插件。
+        插件用于扩展或修改通过MyBatis Generator (MBG)代码生成器生成的代码。
+        插件将按在配置中配置的顺序执行。-->
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"/>
+
+        <!--commentGenerator元素是可选的，并且在context元素中最多只能存在一个。
+        commentGenerator 元素用于配置注释生成器的属性。
+        在MBG中注释生成器用于生成 Java文件和XML文件中的注释。
+        默认的注释生成器将JavaDoc 注释添加到生成的Java元素和XML元素上。
+        注释的目的是要告诉用户这个元素是自动生成的，并且有可能重新生成（也就是说这部分内容不应该被用户修改）。-->
+        <commentGenerator>
+
+            <!--suppressDate这个元素用来指定生成的注释中是否包含生成的日期。 这个属性有以下可选值：
+                1. false 这是默认值。当这个属性是false或者没有指定时，所有元素生成注释时都会带着生成时间。
+                2. true 当这个属性是true时，注释中不会添加生成时间。-->
+            <property name="suppressDate" value="true"/>
+
+            <!--suppressAllComments这个属性用来指定MBG生成的代码中是否包含注释。 这个属性有以下可选值：
+                1. false是默认值
+                当这个属性是false或者没有指定时，所有生成的元素都会包含用来说明这是生成元素的注释。
+                2. true 当这个属性是true时，不会往生成的元素中添加任何注释。
+                注意：如果将这个值设为true，那么所有的代码合并都会被禁用。-->
+            <property name="suppressAllComments" value="true"/>
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+
+        <!--jdbcConnection配置数据库链接地址、账号、密码 修改connectionURL、userId、password -->
+        <!--该元素有两个必选属性:-->
+        <!--driverClass:访问数据库的JDBC驱动程序的完全限定类名-->
+        <!--connectionURL:访问数据库的JDBC连接URL-->
+        <!--该元素还有两个可选属性:-->
+        <!--userId:访问数据库的用户ID-->
+        <!--password:访问数据库的密码-->
+        <jdbcConnection driverClass="${jdbcDriver}"
+                        connectionURL="${jdbcUrl}"
+                        userId="${jdbcUser}"
+                        password="${jdbcPassword}"/>
+
+
+        <!--javaModelGenerator该元素用来控制生成的实体类，根据context中配置的defaultModelType，一个表可能会对应生成多个不同的实体类。
+        一个表对应多个类实际上并不方便，所以前面也推荐使用flat，这种情况下一个表对应一个实体类。 -->
+        <!--targetPackage:生成实体类存放的包名。一般就是放在该包下，实际还会受到其他配置的影响(<table>中会提到)。-->
+        <!--targetProject:指定目标项目路径，使用的是文件系统的绝对路径。-->
+        <javaModelGenerator targetPackage="${modelPackage}"
+                            targetProject="${modelProject}">
+            <!--enableSubPackages:如果true，MBG会根据catalog和schema来生成子包。如果false就会直接用targetPackage属性。默认为false。-->
+            <property name="enableSubPackages" value="true"/>
+        </javaModelGenerator>
+
+
+        <!--该元素可选，在context中最多配置一个。但是有如下两种必选的特殊情况：
+            1.如果targetRuntime目标是iBATIS2，该元素必须配置一个。
+            2.如果targetRuntime目标是MyBatis3，只有当<javaClientGenerator>需要XML时，该元素必须配置一个。
+              如果没有配置 <javaClientGenerator>，则使用以下的规则：
+                1.如果指定了一个<sqlMapGenerator>，那么MBG将只生成XML的SQL映射文件和实体类。
+                2.如果没有指定<sqlMapGenerator>，那么MBG将只生成实体类。 -->
+        <sqlMapGenerator targetPackage="${mapperPackage}"
+                         targetProject="${xmlMapperProject}">
+
+            <!--enableSubPackages:如果true，MBG会根据catalog和schema来生成子包。如果false就会直接用targetPackage属性。默认为false。-->
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!--javaClientGenerator元素可选，在context元素中最多配置一个。如果不配置该元素，就不会生成Mapper接口
+        javaClientGenerator元素有3个必选属性：
+            1.type:该属性用于选择一个预定义的客户端代码（可以理解为Mapper接口）生成器，
+            用户可以自定义实现，需要继承org.mybatis.generator.codegen.AbstractJavaClientGenerator类，必选有一个默认的构造方法。
+            该属性提供了以下预定的代码生成器，首先根据<context>的targetRuntime分成三类：
+                1.1MyBatis3:
+                        ANNOTATEDMAPPER:基于注解的Mapper接口，不会有对应的XML映射文件
+                        MIXEDMAPPER:XML和注解的混合形式，(上面这种情况中的)SqlProvider注解方法会被XML替代。
+                        XMLMAPPER:所有的方法都在XML中，接口调用依赖XML文件。
+                1.2MyBatis3Simple:
+                        ANNOTATEDMAPPER:基于注解的Mapper接口，不会有对应的XML映射文件
+                        XMLMAPPER:所有的方法都在XML中，接口调用依赖XML文件。
+                        Ibatis2Java2或Ibatis2Java5:
+                1.3IBATIS:生成的对象符合iBATIS的DAO框架（不建议使用）。
+                        GENERIC-CI:生成的对象将只依赖于SqlMapClient，通过构造方法注入。
+                        GENERIC-SI:生成的对象将只依赖于SqlMapClient，通过setter方法注入。
+                        SPRING:生成的对象符合Spring的DAO接口
+            2.targetPackage:生成实体类存放的包名，一般就是放在该包下。实际还会受到其他配置的影响(<table>中会提到)。
+            3.targetProject:指定目标项目路径，使用的是文件系统的绝对路径。-->
+        <javaClientGenerator targetPackage="${mapperPackage}"
+                             targetProject="${javaMapperProject}" type="ANNOTATEDMAPPER">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+
+        <!--table元素包含的-->
+        <!--schema:数据库的schema,可以使用SQL通配符匹配。如果设置了该值，生成SQL的表名会变成如schema.tableName的形式。-->
+        <table schema="learning" domainObjectName="" tableName="user_table">
+            <property name="ignoreQualifiersAtRuntime" value="true"/>
+            <property name="rootInterface" value="java.io.Serializable"/>
+
+            <!--            <columnOverride column="" javaType="" />-->
+        </table>
+
+    </context>
+
+</generatorConfiguration>
