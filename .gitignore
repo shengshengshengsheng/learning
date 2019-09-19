@@ -2,3 +2,5 @@
 /eureka-client/target/
 /eureka-ribbon/target/
 /eureka_server/target/
+*.iml
+mybatis-generator/target/
